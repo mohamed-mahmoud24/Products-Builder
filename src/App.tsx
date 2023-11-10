@@ -1,16 +1,16 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-
-function App() {
-    const [count, setCount] = useState(0);
-
+import ProductCard from "./components/ProductCard";
+import { productList } from "./data";
+const App = () => {
+    const renderProductList = productList.map((product) => (
+        <ProductCard product={product} key={product.id} />
+    ));
     return (
-        <>
-            <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        </>
+        <main className="container ">
+            <div className="grid gap-2 md:gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 m-5 p-2 rounded-md">
+                {renderProductList}
+            </div>
+        </main>
     );
-}
+};
 
 export default App;
