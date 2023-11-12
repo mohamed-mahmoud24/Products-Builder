@@ -41,13 +41,11 @@ const App = () => {
             >
                 {input.label}
             </label>
-            {/* LINE BELOW IN WRONG NOW FIX IT! */}
-            {/* <Input type="text" id={input.id} name={input.name} value={product[]} onChange={onChangeHandler} /> */}
             <Input
                 type="text"
                 id={input.id}
                 name={input.name}
-                value={""}
+                value={product[input.name]}
                 onChange={onChangeHandler}
             />
         </div>
