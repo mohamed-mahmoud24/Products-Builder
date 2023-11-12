@@ -1,8 +1,9 @@
 import { useState } from "react";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/UI/Modal";
-import { productList } from "./data";
+import { formInputsList, productList } from "./data";
 import Button from "./components/UI/Button";
+import Input from "./components/UI/Input";
 
 const App = () => {
     /* STATE */
@@ -16,9 +17,23 @@ const App = () => {
     function openModal() {
         setIsOpen(true);
     }
+
+    /* RENDER */
     const renderProductList = productList.map((product) => (
         <ProductCard product={product} key={product.id} />
     ));
+    const renderFormInputList = formInputsList.map((input) => (
+        <div className="flex flex-col">
+            <label
+                className="mb-1 text-sm font-medium text-gray-700"
+                htmlFor={input.id}
+            >
+                {input.label}
+            </label>
+            <Input type={input.type} name={input.name} id={input.id} />
+        </div>
+    ));
+
     return (
         <main className="container ">
             <Button
@@ -36,21 +51,25 @@ const App = () => {
                 closeModal={closeModal}
                 isOpen={isOpen}
             >
-                <div className="flex items-center space-x-3">
-                    <Button
-                        className="bg-indigo-700 hover:bg-indigo-900"
-                        width="w-full"
-                    >
-                        SUBMIT
-                    </Button>
-                    <Button
-                        className="bg-gray-400 hover:bg-gray-500"
-                        width="w-full"
-                        onClick={() => closeModal()}
-                    >
-                        CANCEL
-                    </Button>
-                </div>
+                <form className="space-y-3">
+                    {renderFormInputList}
+
+                    <div className="flex items-center space-x-3">
+                        <Button
+                            className="bg-indigo-700 hover:bg-indigo-900"
+                            width="w-full"
+                        >
+                            SUBMIT
+                        </Button>
+                        <Button
+                            className="bg-gray-400 hover:bg-gray-500"
+                            width="w-full"
+                            onClick={() => closeModal()}
+                        >
+                            CANCEL
+                        </Button>
+                    </div>
+                </form>
             </Modal>
         </main>
     );
