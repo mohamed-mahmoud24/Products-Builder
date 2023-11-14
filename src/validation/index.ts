@@ -6,11 +6,13 @@
  * @param {string} product.description - The description of the product.
  * @param {string} product.imageURL - The URL of the product image.
  * @param {string} product.price - The price of the product.
+ * @param {string[]} product.tempColor - An array of temporary colors.
  * @returns {Object} errors - An object containing validation errors.
  * @returns {string} errors.title - The error message for the title validation.
  * @returns {string} errors.description - The error message for the description validation.
  * @returns {string} errors.imageURL - The error message for the image URL validation.
  * @returns {string} errors.price - The error message for the price validation.
+ * @returns {string} errors.colors - The error message for the colors validation.
  */
 
 export const productValidation = (product: {
@@ -18,6 +20,7 @@ export const productValidation = (product: {
     description: string;
     imageURL: string;
     price: string;
+    tempColor: string[];
 }) => {
     // ** Returns an object
     const errors = {
@@ -25,6 +28,7 @@ export const productValidation = (product: {
         description: "",
         imageURL: "",
         price: "",
+        colors: "",
     };
 
     const imageValidation = /^(ftp|http|https):\/\/[^ "]+$/.test(
@@ -55,6 +59,10 @@ export const productValidation = (product: {
 
     if (!product.price.trim() || isNaN(Number(product.price))) {
         errors.price = "Valid price URL is required";
+    }
+
+    if (!product.tempColor.length) {
+        errors.colors = "you should choose at least one color";
     }
 
     return errors;

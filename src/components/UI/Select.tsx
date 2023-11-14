@@ -1,19 +1,21 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { categories } from "../../data";
-
+import { ICategory } from "../../interfaces";
+interface IProps {
+    selected: ICategory;
+    setSelected: (category: ICategory) => void;
+}
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }
 
-const Select = () => {
-    const [selected, setSelected] = useState(categories[0]);
-
+const Select = ({ selected, setSelected }: IProps) => {
     return (
         <Listbox value={selected} onChange={setSelected}>
             {({ open }) => (
-                <>
+                <Fragment>
                     <Listbox.Label className="block text-sm font-medium text-gray-900">
                         category
                     </Listbox.Label>
@@ -100,7 +102,7 @@ const Select = () => {
                             </Listbox.Options>
                         </Transition>
                     </div>
-                </>
+                </Fragment>
             )}
         </Listbox>
     );

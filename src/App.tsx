@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { v4 as uuid } from "uuid";
 
-import { formInputsList, productList, colors } from "./data";
+import { formInputsList, productList, colors, categories } from "./data";
 import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 
@@ -19,6 +19,7 @@ const App = () => {
         description: "",
         imageURL: "",
         price: "",
+        colors: "",
     };
     const defaultProducts = {
         title: "",
@@ -32,6 +33,7 @@ const App = () => {
         },
     };
     /* STATE */
+    const [selectedCategory, setSelectedCategory] = useState(categories[6]);
     const [products, setProducts] = useState(productList);
     const [product, setProduct] = useState<IProduct>(defaultProducts);
     const [errors, setErrors] = useState(defaultErrorMessage);
@@ -59,6 +61,7 @@ const App = () => {
             description,
             imageURL,
             price,
+            tempColor,
         });
 
         const hasErrorMsg = Object.values(errors).every(
@@ -71,7 +74,12 @@ const App = () => {
         }
 
         setProducts((prev) => [
-            { ...product, id: uuid(), colors: tempColor },
+            {
+                ...product,
+                id: uuid(),
+                colors: tempColor,
+                category: selectedCategory,
+            },
             ...prev,
         ]);
         setProduct(defaultProducts);
@@ -119,7 +127,10 @@ const App = () => {
                     setTempColor((prev) =>
                         prev.filter((item) => item !== color)
                     );
-                else setTempColor((prev) => [...prev, color]);
+                else {
+                    setTempColor((prev) => [...prev, color]);
+                    setErrors({ ...errors, colors: "" });
+                }
             }}
         />
     ));
@@ -154,9 +165,14 @@ const App = () => {
             >
                 <form className="space-y-3" onSubmit={submitHandler}>
                     {renderFormInputList}
+                    <Select
+                        selected={selectedCategory}
+                        setSelected={setSelectedCategory}
+                    />
                     <div className=" flex space-x-1">{renderProductColors}</div>
+                    <ErrorMessage msg={errors.colors} />
+
                     <div className="flex-wrap flex">{renderTempColor}</div>
-                    <Select />
                     <div className="flex items-center space-x-3">
                         <Button
                             className="bg-indigo-700 hover:bg-indigo-900"
