@@ -1,14 +1,17 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import ProductCard from "./components/ProductCard";
-import Modal from "./components/UI/Modal";
+import { v4 as uuid } from "uuid";
+
 import { formInputsList, productList, colors } from "./data";
-import Button from "./components/UI/Button";
-import Input from "./components/UI/Input";
 import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
+
+import Button from "./components/UI/Button";
+import Input from "./components/UI/Input";
+import ProductCard from "./components/ProductCard";
+import Modal from "./components/UI/Modal";
 import ErrorMessage from "./components/UI/ErrorMessage";
 import CircleColor from "./components/UI/CircleColor";
-import { v4 as uuid } from "uuid";
+import Select from "./components/UI/Select";
 
 const App = () => {
     const defaultErrorMessage = {
@@ -153,6 +156,7 @@ const App = () => {
                     {renderFormInputList}
                     <div className=" flex space-x-1">{renderProductColors}</div>
                     <div className="flex-wrap flex">{renderTempColor}</div>
+                    <Select />
                     <div className="flex items-center space-x-3">
                         <Button
                             className="bg-indigo-700 hover:bg-indigo-900"
