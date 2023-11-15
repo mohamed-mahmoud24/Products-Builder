@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, SetStateAction, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 import { formInputsList, productList, colors, categories } from "./data";
@@ -46,25 +46,21 @@ const App = () => {
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
     /* HANDLER */
-    const closeModal = () => setIsOpen(false);
-
-    const openModal = () => setIsOpen(true);
-
-    const closeEditModal = () => {
-        setIsOpenEditModal(false);
+    const closeModal = (setState: (value: SetStateAction<boolean>) => void) => {
+        setState(false);
         setErrors(defaultErrorMessage);
+        setTempColor([]);
     };
+    const openModal = (setState: (value: SetStateAction<boolean>) => void) =>
+        setState(true);
 
-    const openEditModal = () => setIsOpenEditModal(true);
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (
+        e: ChangeEvent<HTMLInputElement>,
+        setState: { (value: SetStateAction<IProduct>): void },
+        state: IProduct
+    ) => {
         const { value, name } = e.target;
-        setProduct({ ...product, [name]: value });
-        setErrors({ ...errors, [name]: "" });
-    };
-    const onChangeEditHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        const { value, name } = e.target;
-        setProductToEdit({ ...productToEdit, [name]: value });
+        setState({ ...state, [name]: value });
         setErrors({ ...errors, [name]: "" });
     };
 
@@ -98,8 +94,7 @@ const App = () => {
             ...prev,
         ]);
         setProduct(defaultProductObj);
-        setTempColor([]);
-        closeModal();
+        closeModal(setIsOpen);
     };
     const submitEditHandler = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
@@ -129,22 +124,19 @@ const App = () => {
         setProducts(updatedProducts);
 
         setProductToEdit(defaultProductObj);
-        setTempColor([]);
-        closeEditModal();
+        closeModal(setIsOpenEditModal);
     };
 
     const onCancle = () => {
         setProduct(defaultProductObj);
-        setErrors(defaultErrorMessage);
-        setTempColor([]);
-        closeModal();
+        closeModal(setIsOpen);
     };
 
     /* RENDER */
     const renderProductList = products.map((product, idx) => (
         <ProductCard
             setTempColor={setTempColor}
-            openEditModal={openEditModal}
+            openEditModal={() => openModal(setIsOpenEditModal)}
             product={product}
             key={product.id}
             setProductToEdit={setProductToEdit}
@@ -166,7 +158,7 @@ const App = () => {
                 id={input.id}
                 name={input.name}
                 value={product[input.name]}
-                onChange={onChangeHandler}
+                onChange={(e) => onChangeHandler(e, setProduct, product)}
             />
             <ErrorMessage msg={errors[input.name]} />
         </div>
@@ -226,7 +218,9 @@ const App = () => {
                     id={id}
                     name={name}
                     value={productToEdit[name]}
-                    onChange={onChangeEditHandler}
+                    onChange={(e) =>
+                        onChangeHandler(e, setProductToEdit, productToEdit)
+                    }
                 />
                 <ErrorMessage msg={errors[name]} />
             </div>
@@ -237,7 +231,7 @@ const App = () => {
         <main className="container ">
             <Button
                 className="block bg-indigo-700 hover:bg-indigo-800 mx-auto my-10 px-10 font-medium"
-                onClick={openModal}
+                onClick={() => openModal(setIsOpen)}
                 width="w-fit"
             >
                 Build Product
@@ -248,7 +242,7 @@ const App = () => {
             {/* ADD PRODUCT */}
             <Modal
                 title="ADD A NEW PRODUCT"
-                closeModal={closeModal}
+                closeModal={() => closeModal(setIsOpen)}
                 isOpen={isOpen}
             >
                 <form className="space-y-3" onSubmit={submitHandler}>
@@ -282,7 +276,7 @@ const App = () => {
             {/* EDIT PRODUCT */}
             <Modal
                 title="EDIT THIS PRODUCT"
-                closeModal={closeEditModal}
+                closeModal={() => closeModal(setIsOpenEditModal)}
                 isOpen={isOpenEditModal}
             >
                 <form className="space-y-3" onSubmit={submitEditHandler}>
@@ -332,7 +326,7 @@ const App = () => {
                             type="button"
                             className="bg-gray-400 hover:bg-gray-500"
                             width="w-full"
-                            onClick={closeEditModal}
+                            onClick={() => closeModal(setIsOpenEditModal)}
                         >
                             CANCEL
                         </Button>
