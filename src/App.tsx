@@ -50,7 +50,10 @@ const App = () => {
 
     const openModal = () => setIsOpen(true);
 
-    const closeEditModal = () => setIsOpenEditModal(false);
+    const closeEditModal = () => {
+        setIsOpenEditModal(false);
+        setErrors(defaultErrorMessage);
+    };
 
     const openEditModal = () => setIsOpenEditModal(true);
 
@@ -329,7 +332,7 @@ const App = () => {
                             type="button"
                             className="bg-gray-400 hover:bg-gray-500"
                             width="w-full"
-                            onClick={onCancle}
+                            onClick={closeEditModal}
                         >
                             CANCEL
                         </Button>
