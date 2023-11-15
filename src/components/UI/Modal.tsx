@@ -12,6 +12,10 @@ const Modal = ({ isOpen, title, closeModal, children }: IProps) => {
         <div>
             <Transition appear show={isOpen}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                    <div
+                        className="fixed inset-0 backdrop-blur-sm"
+                        aria-hidden="true"
+                    />
                     <Transition.Child
                         enter="ease-out duration-300"
                         enterFrom="opacity-0"

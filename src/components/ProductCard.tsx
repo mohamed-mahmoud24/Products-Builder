@@ -1,7 +1,7 @@
 import { IProduct } from "../interfaces";
 import Image from "./Image";
 import Button from "./UI/Button";
-import { txtSlicer } from "../utils/functions";
+import { formatNumberWithCommas, txtSlicer } from "../utils/functions";
 import CircleColor from "./UI/CircleColor";
 
 interface IProps {
@@ -53,7 +53,7 @@ const ProductCard = ({
                 </div>
                 <div className="flex items-center justify-between">
                     <span className="text-lg text-indigo-600 font-semibold">
-                        ${price}
+                        ${formatNumberWithCommas(price)}
                     </span>
                     <div className="flex space-x-1 items-center">
                         <span>{category.name}</span>
