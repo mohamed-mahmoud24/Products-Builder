@@ -20,7 +20,7 @@ export const productValidation = (product: {
     description: string;
     imageURL: string;
     price: string;
-    tempColor: string[];
+    tempColor?: string[] | undefined;
 }) => {
     // ** Returns an object
     const errors = {
@@ -61,7 +61,7 @@ export const productValidation = (product: {
         errors.price = "Valid price URL is required";
     }
 
-    if (!product.tempColor.length) {
+    if (product.tempColor && !product.tempColor?.length) {
         errors.colors = "you should choose at least one color";
     }
 

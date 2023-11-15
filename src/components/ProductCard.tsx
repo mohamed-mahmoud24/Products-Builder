@@ -6,10 +6,36 @@ import CircleColor from "./UI/CircleColor";
 
 interface IProps {
     product: IProduct;
+    setProductToEdit: (product: IProduct) => void;
+    openEditModal: () => void;
+    idx: number;
+    setProductToEditIdx: (value: number) => void;
+    setTempColor: (value: string[]) => void;
 }
 
-const ProductCard = ({ product }: IProps) => {
+const ProductCard = ({
+    product,
+    openEditModal,
+    setProductToEdit,
+    idx,
+    setProductToEditIdx,
+    setTempColor,
+}: IProps) => {
     const { title, category, colors, description, imageURL, price } = product;
+
+    /* Render */
+    const renderProductColors = colors.length
+        ? colors.map((color) => <CircleColor color={color} key={color} />)
+        : "Not available colors!";
+
+    /* Handler */
+    const onEdit = () => {
+        setProductToEdit(product);
+        openEditModal();
+        setProductToEditIdx(idx);
+        setTempColor(colors);
+    };
+
     return (
         <div className="max-w-sm w-full md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col">
             <Image
@@ -23,11 +49,7 @@ const ProductCard = ({ product }: IProps) => {
                     {txtSlicer(description)}
                 </p>
                 <div className="flex items-center flex-wrap space-x-1">
-                    {colors.length
-                        ? colors.map((color) => (
-                              <CircleColor color={color} key={color} />
-                          ))
-                        : "Not available colors!"}
+                    {renderProductColors}
                 </div>
                 <div className="flex items-center justify-between">
                     <span className="text-lg text-indigo-600 font-semibold">
@@ -46,6 +68,7 @@ const ProductCard = ({ product }: IProps) => {
                     <Button
                         className="bg-indigo-700 hover:bg-indigo-900"
                         width="w-full"
+                        onClick={onEdit}
                     >
                         EDIT
                     </Button>
