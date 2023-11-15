@@ -6,11 +6,12 @@ import CircleColor from "./UI/CircleColor";
 
 interface IProps {
     product: IProduct;
-    setProductToEdit: (product: IProduct) => void;
-    openEditModal: () => void;
     idx: number;
+    setProductToEdit: (product: IProduct) => void;
     setProductToEditIdx: (value: number) => void;
     setTempColor: (value: string[]) => void;
+    openRemoveModal: () => void;
+    openEditModal: () => void;
 }
 
 const ProductCard = ({
@@ -20,6 +21,7 @@ const ProductCard = ({
     idx,
     setProductToEditIdx,
     setTempColor,
+    openRemoveModal,
 }: IProps) => {
     const { title, category, colors, description, imageURL, price } = product;
 
@@ -34,6 +36,11 @@ const ProductCard = ({
         openEditModal();
         setProductToEditIdx(idx);
         setTempColor(colors);
+    };
+
+    const onRemove = () => {
+        setProductToEdit(product);
+        openRemoveModal();
     };
 
     return (
@@ -73,6 +80,7 @@ const ProductCard = ({
                         EDIT
                     </Button>
                     <Button
+                        onClick={onRemove}
                         className="bg-red-700 hover:bg-red-900"
                         width="w-full"
                     >
